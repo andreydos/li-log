@@ -1,6 +1,12 @@
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.LiLog = factory());
+}(this, (function () { 'use strict';
+
 function Log(userOptions) {
     const baseOptions = {
-            level: 1, // info as default
+            level: 1, // debug
             logMethods: [
                 {
                     name: 'debug',
@@ -45,6 +51,7 @@ function Log(userOptions) {
     function log(options, methodInfo, args) {
         const data = `${methodInfo.name} ${args}`;
 
+        // trans the final result
         options.transport.forEach((fn) => {
             if (typeof fn === 'function') {
                 fn(data);
@@ -57,4 +64,12 @@ function Log(userOptions) {
     }
 }
 
-export { Log };
+function toConsole(options) {
+    return new Log(options);
+}
+
+Log.console = toConsole;
+
+return Log;
+
+})));

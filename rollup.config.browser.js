@@ -1,6 +1,6 @@
 export default {
     format: 'umd',
-    moduleName: 'li-log',
+    moduleName: 'LiLog',
     entry: 'src/browser.js',
-    dest: 'li-log.browser.js'
+    dest: 'liLog.browser.js'
 };

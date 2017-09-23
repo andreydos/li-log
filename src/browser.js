@@ -1,7 +1,7 @@
 import { toConsole as console} from './browser-version/console';
-import { Log } from './browser-version/log.browser';
+import { Log as Logger } from './browser-version/log.browser';
 
-Log.console = console;
+Logger.console = console;
 
-export default Log;
+export default Logger;
 
