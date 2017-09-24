@@ -1,6 +1,6 @@
 {
   "name": "li-log",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "little tiny logger",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,9 @@
   },
   "keywords": [
     "logger",
-    "log"
+    "log",
+    "console",
+    "color-console"
   ],
   "author": "“Andrey <“andrey.novator@gmail.com”> (http://www.andrey.pp.ua)",
   "license": "MIT",
@@ -30,7 +32,8 @@
     "chai": "^4.1.2",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.5.3"
+    "mocha": "^3.5.3",
+    "rollup-plugin-minify-es": "^1.1.1"
   },
   "dependencies": {}
 }

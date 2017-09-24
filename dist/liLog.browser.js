@@ -89,3 +89,4 @@ Log.console = toConsole;
 return Log;
 
 })));
+//# sourceMappingURL=liLog.browser.js.map

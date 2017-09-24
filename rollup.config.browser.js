@@ -1,6 +1,9 @@
 export default {
-    format: 'umd',
-    moduleName: 'LiLog',
-    entry: 'src/browser.js',
-    dest: 'liLog.browser.js'
+    output: {
+        format: 'umd',
+        file: 'dist/liLog.browser.js',
+        sourcemap: true
+    },
+    name: 'LiLog',
+    input: 'src/browser.js'
 };
