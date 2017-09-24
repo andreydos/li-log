@@ -4,34 +4,48 @@
 	(global.LiLog = factory());
 }(this, (function () { 'use strict';
 
+// default styles
+const styles = {
+    debug: "font-style: italic; color: #1B2B34;",
+    info: "color: #6699CC;",
+    warning: "font-weight: bold; color: #AB7967;",
+    error: "font-weight: bold; color: #E24825;",
+    critical: "font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);"
+};
+
 function Log(userOptions) {
     const baseOptions = {
-            level: 1, // debug
+            level: 1, // info as default
             logMethods: [
                 {
                     name: 'debug',
-                    level: 0
+                    level: 0,
+                    style: styles.debug
                 },
                 {
                     name: 'info',
-                    level: 1
+                    level: 1,
+                    style: styles.info
                 },
                 {
                     name: 'warning',
-                    level: 2
+                    level: 2,
+                    style: styles.warning
                 },
                 {
                     name: 'error',
-                    level: 3
+                    level: 3,
+                    style: styles.error
                 },
                 {
                     name: 'critical',
-                    level: 4
+                    level: 4,
+                    style: styles.critical
                 }
             ],
             transport: [
-                function (logObject) {
-                    console.log(logObject);
+                function (data) {
+                    console.log(data.text, data.style);
                 }
             ],
         };
@@ -49,9 +63,11 @@ function Log(userOptions) {
     });
 
     function log(options, methodInfo, args) {
-        const data = `${methodInfo.name} ${args}`;
+        const data = {
+            text: `%c${methodInfo.name} ${args}`,
+            style: methodInfo.style
+        };
 
-        // trans the final result
         options.transport.forEach((fn) => {
             if (typeof fn === 'function') {
                 fn(data);
