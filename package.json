@@ -1,6 +1,6 @@
 {
   "name": "li-log",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "little tiny logger",
   "main": "index.js",
   "scripts": {
@@ -32,8 +32,7 @@
     "chai": "^4.1.2",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.5.3",
-    "rollup-plugin-minify-es": "^1.1.1"
+    "mocha": "^3.5.3"
   },
   "dependencies": {}
 }

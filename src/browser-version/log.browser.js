@@ -1,3 +1,5 @@
+import * as utils from '../utils';
+
 // default styles
 const styles = {
     debug: "font-style: italic; color: #1B2B34;",
@@ -44,7 +46,7 @@ function Log(userOptions) {
             ],
         };
 
-    const options = userOptions ? userOptions : baseOptions;
+    const options = userOptions ? utils.mergeOptions(baseOptions, userOptions) : baseOptions;
 
     options.logMethods.forEach((methodInfo) => {
         if (methodInfo.level >= options.level) {
