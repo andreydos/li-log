@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/andreydos/li-log.svg?branch=master)](https://travis-ci.org/andreydos/li-log)
 [![Coverage Status](https://coveralls.io/repos/github/andreydos/li-log/badge.svg?branch=master)](https://coveralls.io/github/andreydos/li-log?branch=master)
 
-# Little Logger (LiLog)
+# Little Logger
 
 Little tiny logger (now only browser version (path 'dist/liLog.browser.js' ) , node version is coming :) )
 
@@ -18,7 +18,7 @@ Little tiny logger (now only browser version (path 'dist/liLog.browser.js' ) , n
 Rollup must be installed to rebuild project
 
 ```
-npm i rollup -G
+npm install --global rollup
 ```
 
 ## Running the tests
