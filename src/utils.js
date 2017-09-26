@@ -16,11 +16,16 @@ function copyDeep(baseObj) {
     function cloneObject(obj) {
         const clone = {};
 
-        for(let i in obj) {
-            if(typeof(obj[i])==="object" && obj[i] !== null)
-                clone[i] = cloneObject(obj[i]);
-            else
-                clone[i] = obj[i];
+        const objKeys = Object.keys(obj);
+
+        for (let i = objKeys.length - 1; i >= 0; i--) {
+            const key = objKeys[i];
+            
+            if(typeof(obj[key])==="object" && obj[key] !== null) {
+                clone[key] = cloneObject(obj[key]);
+            } else {
+                clone[key] = obj[key];
+            }
         }
 
         return clone;

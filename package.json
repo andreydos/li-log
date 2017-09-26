@@ -1,7 +1,7 @@
 {
   "name": "li-log",
-  "version": "0.3.0",
-  "description": "little tiny logger",
+  "version": "0.4.0",
+  "description": "Little tiny logger",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha --reporter spec",

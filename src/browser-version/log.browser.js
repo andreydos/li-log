@@ -58,7 +58,25 @@ function Log(userOptions) {
         }
     });
 
+    this.setLevel = function (level) {
+        if (Number.isInteger(level)) {
+            options.level = level;
+        } else if (typeof level === 'string') {
+            const methods = options.logMethods.filter((method) => {
+                return method.name === level;
+            });
+            if (Array.isArray(methods) && methods.length) {
+                options.level = methods[0].level;
+            }
+        } else {
+            console.log(`setLevel() level ${level} was not found in LiLog instance`);
+        }
+    };
+
     function log(options, methodInfo, args) {
+        debugger;
+        if (methodInfo.level < options.level) return;
+
         const data = {
             text: `%c${methodInfo.name} ${args}`,
             style: methodInfo.style
