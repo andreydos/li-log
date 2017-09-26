@@ -5,7 +5,7 @@
 
 # Little Logger (LiLog)
 
-Little tiny logger (now only browser version, node version is coming :) )
+Little tiny logger (now only browser version (path 'dist/liLog.browser.js' ) , node version is coming :) )
 
 ## Getting Started
 
