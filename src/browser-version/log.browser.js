@@ -74,7 +74,6 @@ function Log(userOptions) {
     };
 
     function log(options, methodInfo, args) {
-        debugger;
         if (methodInfo.level < options.level) return;
 
         const data = {

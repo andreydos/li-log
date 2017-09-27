@@ -1,6 +1,6 @@
 {
   "name": "li-log",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Little tiny logger",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "testWin": "node_modules/mocha/bin/_mocha — -R spec test/*",
     "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*",
     "coverWin": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*",
-    "buildBrowserVersion": "rollup -c rollup.config.browser.js"
+    "buildBrowserVersion": "rollup -c rollup.config.browser.js",
+    "buildBrowserMinifiedVersion": "rollup -c rollup.config.browser.minified.js"
   },
   "repository": {
     "type": "git",
@@ -30,10 +31,13 @@
   },
   "homepage": "https://github.com/andreydos/li-log#readme",
   "devDependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^4.1.2",
     "coveralls": "^2.13.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.5.3"
+    "mocha": "^3.5.3",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-babel-minify": "^3.1.2"
   },
   "dependencies": {}
 }
