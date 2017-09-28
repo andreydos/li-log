@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.4] - 2017-09-28
+### Update
+- change deprecated babel-preset-es2015 plugin to babel-preset-env
+
 ## [0.4.3] - 2017-09-27
 ### Added
 - added babel transpiler (es6 to es5)

@@ -4,7 +4,7 @@ import minify from 'rollup-plugin-babel-minify';
 export default {
     output: {
         format: 'umd',
-        file: 'dist/liLog.browser.min.js',
+        file: 'dist/li-log.browser.min.js',
         sourceMap: true
     },
     name: 'LiLog',
