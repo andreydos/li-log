@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.0] - 2017-09-28
+### Added
+- browser or nodejs logic
+- processing different messages in different environment
+### Update
+- rollup update (added main config for public npm index.js file)
+
+
 ## [0.4.4] - 2017-09-28
 ### Update
 - change deprecated babel-preset-es2015 plugin to babel-preset-env

@@ -1,6 +1,6 @@
 {
   "name": "li-log",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "Little tiny logger",
   "main": "index.js",
   "scripts": {
@@ -8,8 +8,9 @@
     "testWin": "node_modules/mocha/bin/_mocha — -R spec test/*",
     "cover": "node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*",
     "coverWin": "node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- -R spec test/*",
-    "buildBrowserVersion": "rollup -c rollup.config.browser.js",
-    "buildBrowserMinifiedVersion": "rollup -c rollup.config.browser.minified.js"
+    "build": "rollup -c",
+    "buildBrowser": "rollup -c rollup.config.browser.js",
+    "buildBrowserMin": "rollup -c rollup.config.browser.minified.js"
   },
   "repository": {
     "type": "git",

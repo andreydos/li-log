@@ -1,8 +1,8 @@
-import * as utils from '../utils';
+import * as utils from './utils';
 
-// default styles
-const styles = {
-    debug: "font-style: italic; color: #1B2B34;",
+// default browser text styles
+const browserConsoleStyles = {
+    debug: "font-browserStyle: italic; color: #1B2B34;",
     info: "color: #6699CC;",
     warning: "font-weight: bold; color: #AB7967;",
     error: "font-weight: bold; color: #E24825;",
@@ -10,43 +10,49 @@ const styles = {
 };
 
 function Log(userOptions) {
-    const baseOptions = {
+    const {isBrowser, isNode, mergeOptions} = utils,
+        baseOptions = {
             level: 1, // info as default
             logMethods: [
                 {
                     name: 'debug',
                     level: 0,
-                    style: styles.debug
+                    browserStyle: browserConsoleStyles.debug
                 },
                 {
                     name: 'info',
                     level: 1,
-                    style: styles.info
+                    browserStyle: browserConsoleStyles.info
                 },
                 {
                     name: 'warning',
                     level: 2,
-                    style: styles.warning
+                    browserStyle: browserConsoleStyles.warning
                 },
                 {
                     name: 'error',
                     level: 3,
-                    style: styles.error
+                    browserStyle: browserConsoleStyles.error
                 },
                 {
                     name: 'critical',
                     level: 4,
-                    style: styles.critical
+                    browserStyle: browserConsoleStyles.critical
                 }
             ],
             transport: [
                 function (data) {
-                    console.log(data.text, data.style);
+                    if (isBrowser) {
+                        console.log(data.message, data.browserStyle);
+                    }
+                    if (isNode) {
+                        console.log(data.message);
+                    }
                 }
             ],
         };
 
-    const options = userOptions ? utils.mergeOptions(baseOptions, userOptions) : baseOptions;
+    const options = userOptions ? mergeOptions(baseOptions, userOptions) : baseOptions;
 
     options.logMethods.forEach((methodInfo) => {
         if (methodInfo.level >= options.level) {
@@ -76,9 +82,18 @@ function Log(userOptions) {
     function log(options, methodInfo, args) {
         if (methodInfo.level < options.level) return;
 
+        let message = `${methodInfo.name} ${args}`;
+
+        if (isBrowser) {
+            message = `%c${message}`;
+        } else if (isNode) {
+            message = `NODEJS ${message}`;
+        }
+
         const data = {
-            text: `%c${methodInfo.name} ${args}`,
-            style: methodInfo.style
+            message,
+            browserStyle: methodInfo.browserStyle,
+            nodeStyle: methodInfo.nodeStyle
         };
 
         options.transport.forEach((fn) => {
