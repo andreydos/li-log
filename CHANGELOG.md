@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.3] - 2017-09-28
+### Update
+- README update
+
 ## [0.5.2] - 2017-09-28
 ### Update
 - npm module downgrade to es5 umd module

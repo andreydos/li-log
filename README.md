@@ -5,13 +5,36 @@
 
 # Little Logger
 
-Little tiny logger (browser version available 'dist/liLog.browser.js')
+Little tiny logger (browser version available 'dist/liLog.browser.min.js')
 
 ## Getting Started
+**Browser usage** see in examples directory.
 
-1. Clone project
-2. npm i
-3. view and run main possible scripts (test, build, etc) from package.json
+**Node usage**:
+
+Define logger with default setting:
+
+```
+var liLog = require("li-log")
+
+var logger = new liLog();
+
+logger.info('Info');
+```
+
+Define logger with custom setting (log level - 3. Methods: debug, info, warning will be skipped, messages with methods: error, critical will be printed in the console):
+
+
+```
+var liLog = require("li-log")
+
+var logger = new liLog({ level: 3});
+
+logger.info('Info'); // will be skipped
+logger.error('Error) // you'll see in console
+```
+
+_Here will be described another setting options in the future._
 
 ### Prerequisites
 
