@@ -144,12 +144,12 @@ function Log(userOptions) {
     function log(options, methodInfo, args) {
         if (methodInfo.level < options.level) return;
 
-        var message = methodInfo.name + " " + args;
+        var message = "<" + methodInfo.name + "> " + args;
 
         if (isBrowser$$1) {
             message = "%c" + message;
         } else if (isNode$$1) {
-            message = "NODEJS " + message;
+            message = "|li-log| " + message;
         }
 
         var data = {

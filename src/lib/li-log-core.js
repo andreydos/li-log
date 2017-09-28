@@ -82,12 +82,12 @@ function Log(userOptions) {
     function log(options, methodInfo, args) {
         if (methodInfo.level < options.level) return;
 
-        let message = `${methodInfo.name} ${args}`;
+        let message = `<${methodInfo.name}> ${args}`;
 
         if (isBrowser) {
             message = `%c${message}`;
         } else if (isNode) {
-            message = `NODEJS ${message}`;
+            message = `|li-log| ${message}`;
         }
 
         const data = {
