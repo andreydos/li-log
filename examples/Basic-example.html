@@ -12,7 +12,6 @@
         // add logger property customization
         let loggerLevel3 = new LiLog({level:0}); // change log level (same as setLevel(0))
 
-
         logger.debug('Hello debug!'); // no output to console (debug level (0) less default logger level(1))
         loggerLevel3.debug('Hello debug! log level - 0'); // print text to console (critical level more than 3)
 
@@ -26,6 +25,8 @@
         logger.error('Hello error!');
 
         logger.critical('Hello critical!');
+        logger.disable();
+        logger.critical('Hello critical! Disable');
     </script>
 </body>
 </html>

@@ -36,13 +36,13 @@ logger.error('Error) // you'll see in console
 
 _Here will be described another setting options in the future._
 
-### Prerequisites
 
-Rollup must be installed to rebuild project
+Disable logger:
 
 ```
-npm install --global rollup
+logger.disable();
 ```
+
 
 ## Running the tests
 

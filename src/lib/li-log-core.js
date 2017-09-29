@@ -54,6 +54,8 @@ function Log(userOptions) {
 
     const options = userOptions ? mergeOptions(baseOptions, userOptions) : baseOptions;
 
+    let loggerDisabled = false;
+
     options.logMethods.forEach((methodInfo) => {
         if (methodInfo.level >= options.level) {
             this[methodInfo.name] = function (...args) {
@@ -79,8 +81,12 @@ function Log(userOptions) {
         }
     };
 
+    this.disable = function () {
+        loggerDisabled = true;
+    };
+
     function log(options, methodInfo, args) {
-        if (methodInfo.level < options.level) return;
+        if (loggerDisabled || methodInfo.level < options.level) return;
 
         let message = `<${methodInfo.name}> ${args}`;
 

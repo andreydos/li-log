@@ -1,6 +1,6 @@
 {
   "name": "li-log",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Little tiny logger",
   "main": "index.js",
   "scripts": {
@@ -34,9 +34,10 @@
   "devDependencies": {
     "babel-preset-env": "^1.6.0",
     "chai": "^4.1.2",
-    "coveralls": "^2.13.1",
+    "coveralls": "^2.13.3",
     "istanbul": "^0.4.5",
     "mocha": "^3.5.3",
+    "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-babel-minify": "^3.1.2"
   },

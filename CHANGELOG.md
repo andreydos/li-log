@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.6.0] - 2017-09-29
+### Added
+- added functionality to disable logger
+
 ## [0.5.3] - 2017-09-28
 ### Update
 - README update
@@ -20,7 +24,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - processing different messages in different environment
 ### Update
 - rollup update (added main config for public npm index.js file)
-
 
 ## [0.4.4] - 2017-09-28
 ### Update
