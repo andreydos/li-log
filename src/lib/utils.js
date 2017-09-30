@@ -1,42 +1,33 @@
-function mergeOptions(baseOptions, userOptions) {
-    "use strict";
-    const resultOptions = copyDeep(baseOptions),
-        keys = Object.keys(userOptions);
-
-    for (let i = keys.length - 1; i >= 0; i--) {
-        const key = keys[i];
-
-        resultOptions[key] = userOptions[key];
-    }
-
-    return resultOptions;
-}
-
 function copyDeep(baseObj) {
     function cloneObject(obj) {
         const clone = {};
-
         const objKeys = Object.keys(obj);
+        let i = objKeys.length;
 
-        for (let i = objKeys.length - 1; i >= 0; i--) {
+        while (i) {
             const key = objKeys[i];
-            
-            if(typeof(obj[key])==="object" && obj[key] !== null) {
+
+            if (typeof (obj[key]) === 'object' && obj[key] !== null) {
                 clone[key] = cloneObject(obj[key]);
             } else {
                 clone[key] = obj[key];
             }
+
+            i -= 1;
         }
 
         return clone;
     }
 
-    const newObj = {},
-        keys = Object.keys(baseObj);
+    const newObj = {};
+    const keys = Object.keys(baseObj);
 
-    for (let i = keys.length - 1; i >= 0; i--) {
-        const key = keys[i],
-            current = baseObj[key];
+    let j = keys.length;
+
+    while (j) {
+        const key = keys[j];
+        const current = baseObj[key];
+
         if (Array.isArray(current)) {
             newObj[key] = current.slice(0);
         } else if (typeof current === 'object') {
@@ -44,17 +35,49 @@ function copyDeep(baseObj) {
         } else {
             newObj[key] = current;
         }
+
+        j -= 1;
     }
 
     return newObj;
 }
 
-const isBrowser = (new Function("try {return this===window;}catch(e){ return false;}"))(),
-    isNode = (new Function("try {return this===global;}catch(e){return false;}"))();
+function mergeOptions(baseOptions, userOptions) {
+    const resultOptions = copyDeep(baseOptions);
+    const keys = Object.keys(userOptions);
 
+    let i = keys.length;
 
-export {
+    while (i) {
+        const key = keys[i];
+
+        resultOptions[key] = userOptions[key];
+
+        i -= 1;
+    }
+
+    return resultOptions;
+}
+
+const isBrowser = (() => {
+    try {
+        return Boolean(window);
+    } catch (e) {
+        return false;
+    }
+})();
+const isNode = (() => {
+    try {
+        return Boolean(global);
+    } catch (e) {
+        return false;
+    }
+})();
+
+const utils = {
     mergeOptions,
     isBrowser,
-    isNode
-}
+    isNode,
+};
+
+export default utils;

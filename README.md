@@ -12,7 +12,7 @@ Little tiny logger (browser version available 'dist/liLog.browser.min.js')
 
 **Node usage**:
 
-Define logger with default setting:
+#####Define logger with default setting:
 
 ```
 var liLog = require("li-log")
@@ -22,7 +22,7 @@ var logger = new liLog();
 logger.info('Info');
 ```
 
-Define logger with custom setting (log level - 3. Methods: debug, info, warning will be skipped, messages with methods: error, critical will be printed in the console):
+#####Define logger with custom setting (log level - 3. Methods: debug, info, warning will be skipped, messages with methods: error, critical will be printed in the console):
 
 
 ```
@@ -36,8 +36,23 @@ logger.error('Error) // you'll see in console
 
 _Here will be described another setting options in the future._
 
+#####Disable color output(with user options):
+```
+var logger = new liLog({
+    coloredOutput: false,
+    ... otherOptions
+});
+```
 
-Disable logger:
+or with single string argument 
+
+```
+var logger = new liLog('no-color');
+
+```
+
+
+#####Disable logger:
 
 ```
 logger.disable();

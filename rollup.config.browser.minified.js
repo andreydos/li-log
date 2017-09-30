@@ -5,7 +5,7 @@ export default {
     output: {
         format: 'umd',
         file: 'dist/li-log.min.js',
-        sourceMap: true
+        sourcemap: true
     },
     name: 'LiLog',
     input: 'src/index.js',

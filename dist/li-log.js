@@ -4,80 +4,230 @@
 	(global.LiLog = factory());
 }(this, (function () { 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
-function mergeOptions(baseOptions, userOptions) {
-    "use strict";
 
-    var resultOptions = copyDeep(baseOptions),
-        keys = Object.keys(userOptions);
 
-    for (var i = keys.length - 1; i >= 0; i--) {
-        var key = keys[i];
 
-        resultOptions[key] = userOptions[key];
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
     }
 
-    return resultOptions;
-}
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
 
 function copyDeep(baseObj) {
     function cloneObject(obj) {
         var clone = {};
-
         var objKeys = Object.keys(obj);
+        var i = objKeys.length;
 
-        for (var i = objKeys.length - 1; i >= 0; i--) {
+        while (i) {
             var key = objKeys[i];
 
-            if (_typeof(obj[key]) === "object" && obj[key] !== null) {
+            if (_typeof(obj[key]) === 'object' && obj[key] !== null) {
                 clone[key] = cloneObject(obj[key]);
             } else {
                 clone[key] = obj[key];
             }
+
+            i -= 1;
         }
 
         return clone;
     }
 
-    var newObj = {},
-        keys = Object.keys(baseObj);
+    var newObj = {};
+    var keys = Object.keys(baseObj);
 
-    for (var i = keys.length - 1; i >= 0; i--) {
-        var key = keys[i],
-            current = baseObj[key];
+    var j = keys.length;
+
+    while (j) {
+        var key = keys[j];
+        var current = baseObj[key];
+
         if (Array.isArray(current)) {
             newObj[key] = current.slice(0);
-        } else if ((typeof current === "undefined" ? "undefined" : _typeof(current)) === 'object') {
+        } else if ((typeof current === 'undefined' ? 'undefined' : _typeof(current)) === 'object') {
             newObj[key] = cloneObject(current);
         } else {
             newObj[key] = current;
         }
+
+        j -= 1;
     }
 
     return newObj;
 }
 
-var isBrowser = new Function("try {return this===window;}catch(e){ return false;}")();
-var isNode = new Function("try {return this===global;}catch(e){return false;}")();
+function mergeOptions(baseOptions, userOptions) {
+    var resultOptions = copyDeep(baseOptions);
+    var keys = Object.keys(userOptions);
+
+    var i = keys.length;
+
+    while (i) {
+        var key = keys[i];
+
+        resultOptions[key] = userOptions[key];
+
+        i -= 1;
+    }
+
+    return resultOptions;
+}
+
+var isBrowser = function () {
+    try {
+        return Boolean(window);
+    } catch (e) {
+        return false;
+    }
+}();
+var isNode = function () {
+    try {
+        return Boolean(global);
+    } catch (e) {
+        return false;
+    }
+}();
+
+var utils = {
+    mergeOptions: mergeOptions,
+    isBrowser: isBrowser,
+    isNode: isNode
+};
 
 // default browser text styles
 var browserConsoleStyles = {
-    debug: "font-browserStyle: italic; color: #1B2B34;",
-    info: "color: #6699CC;",
-    warning: "font-weight: bold; color: #AB7967;",
-    error: "font-weight: bold; color: #E24825;",
-    critical: "font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);"
+    debug: 'font-browserStyle: italic; color: #1B2B34;',
+    info: 'color: #6699CC;',
+    warning: 'font-weight: bold; color: #AB7967;',
+    error: 'font-weight: bold; color: #E24825;',
+    critical: 'font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);'
 };
 
 function Log(userOptions) {
     var _this = this;
 
-    var isBrowser$$1 = isBrowser,
-        isNode$$1 = isNode,
-        mergeOptions$$1 = mergeOptions,
-        baseOptions = {
+    var isBrowser = utils.isBrowser,
+        isNode = utils.isNode,
+        mergeOptions = utils.mergeOptions;
+
+    var baseOptions = {
         level: 1, // info as default
+        coloredOutput: true,
         logMethods: [{
             name: 'debug',
             level: 0,
@@ -99,20 +249,55 @@ function Log(userOptions) {
             level: 4,
             browserStyle: browserConsoleStyles.critical
         }],
-        transport: [function (data) {
-            if (isBrowser$$1) {
-                console.log(data.message, data.browserStyle);
-            }
-            if (isNode$$1) {
+        transport: [function finalLog(data) {
+            if (isBrowser) {
+                if (baseOptions.coloredOutput) {
+                    console.log(data.message, data.browserStyle);
+                } else {
+                    console.log(data.message);
+                }
+            } else {
                 console.log(data.message);
             }
         }]
     };
 
-
-    var options = userOptions ? mergeOptions$$1(baseOptions, userOptions) : baseOptions;
-
+    var options = baseOptions;
     var loggerDisabled = false;
+
+    if ((typeof userOptions === 'undefined' ? 'undefined' : _typeof(userOptions)) === 'object') {
+        options = mergeOptions(baseOptions, userOptions);
+    } else if (typeof userOptions === 'string' && userOptions === 'no-color') {
+        baseOptions.coloredOutput = false;
+    }
+
+    function log(logOptions, methodInfo, args) {
+        if (loggerDisabled || methodInfo.level < logOptions.level) return;
+
+        var message = '<' + methodInfo.name + '> ' + args;
+
+        if (logOptions.coloredOutput) {
+            if (isBrowser) {
+                message = '%c' + message;
+            } else if (isNode) {
+                message = '|li-log| ' + message;
+            }
+        }
+
+        var data = {
+            message: message,
+            browserStyle: methodInfo.browserStyle,
+            nodeStyle: methodInfo.nodeStyle
+        };
+
+        logOptions.transport.forEach(function (fn) {
+            if (typeof fn === 'function') {
+                fn(data);
+            } else {
+                throw new Error('Transport item not a function');
+            }
+        });
+    }
 
     options.logMethods.forEach(function (methodInfo) {
         if (methodInfo.level >= options.level) {
@@ -139,41 +324,13 @@ function Log(userOptions) {
                 options.level = methods[0].level;
             }
         } else {
-            console.log("setLevel() level " + level + " was not found in LiLog instance");
+            console.log('setLevel() level ' + level + ' was not found in LiLog instance');
         }
     };
 
     this.disable = function () {
         loggerDisabled = true;
     };
-
-    function log(options, methodInfo, args) {
-        if (loggerDisabled || methodInfo.level < options.level) return;
-
-        var message = "<" + methodInfo.name + "> " + args;
-
-        if (isBrowser$$1) {
-            message = "%c" + message;
-        } else if (isNode$$1) {
-            message = "|li-log| " + message;
-        }
-
-        var data = {
-            message: message,
-            browserStyle: methodInfo.browserStyle,
-            nodeStyle: methodInfo.nodeStyle
-        };
-
-        options.transport.forEach(function (fn) {
-            if (typeof fn === 'function') {
-                fn(data);
-            } else {
-                throw new Error('Transport item not a function');
-            }
-        });
-
-        return data;
-    }
 }
 
 return Log;
