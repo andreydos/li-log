@@ -22,9 +22,11 @@
 
         logger.warning('Hello warning!'); // no output due to manually changed log level (warning log level is 3)
 
-        logger.error('Hello error!');
+        logger.outputOnly(['critical']);
 
         logger.critical('Hello critical!');
+
+        logger.error('Hello error!');
         logger.disable();
         logger.critical('Hello critical! Disable');
     </script>
