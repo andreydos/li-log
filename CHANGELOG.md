@@ -2,16 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [0.8.2] - 2017-09-02
+## [0.8.2] - 2017-10-02
 - added timestamp for browser version
 
-## [0.8.1] - 2017-09-02
+## [0.8.1] - 2017-10-02
+### Added
+- added timestamp for node version
 ### Update
 - package and readme update
 
-## [0.8.0] - 2017-09-02
+## [0.8.0] - 2017-10-01
 ### Added
-- added timestamp for node version
+- add possibility to select specific methods for output and mute other log methods
 
 ## [0.7.0] - 2017-09-30
 ### Added

@@ -197,6 +197,7 @@ var isBrowser = function () {
         return false;
     }
 }();
+
 var isNode = function () {
     try {
         return Boolean(global);
@@ -254,6 +255,7 @@ function Log(userOptions) {
     var baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
+        outputMethodOnly: [],
         logMethods: [{
             name: 'debug',
             level: 0,
@@ -298,7 +300,7 @@ function Log(userOptions) {
     }
 
     function log(logOptions, methodInfo, args) {
-        if (loggerDisabled || methodInfo.level < logOptions.level) return;
+        if (loggerDisabled || methodInfo.level < logOptions.level || logOptions.outputMethodOnly.length && !logOptions.outputMethodOnly.includes(methodInfo.name)) return;
 
         var message = void 0;
 
@@ -362,6 +364,18 @@ function Log(userOptions) {
 
     this.disable = function () {
         loggerDisabled = true;
+    };
+
+    this.outputOnly = function (methods) {
+        if (Array.isArray(methods)) {
+            options.outputMethodOnly = methods;
+        } else if (typeof methods === 'string') {
+            options.outputMethodOnly = [methods];
+        }
+    };
+
+    this.disableOutputOnlyOption = function () {
+        options.outputMethodOnly = [];
     };
 }
 

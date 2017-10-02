@@ -19,6 +19,7 @@ function Log(userOptions) {
     const baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
+        outputMethodOnly: [],
         logMethods: [
             {
                 name: 'debug',
@@ -71,7 +72,10 @@ function Log(userOptions) {
     }
 
     function log(logOptions, methodInfo, args) {
-        if (loggerDisabled || methodInfo.level < logOptions.level) return;
+        if (loggerDisabled
+            || methodInfo.level < logOptions.level
+            || (logOptions.outputMethodOnly.length
+                && !logOptions.outputMethodOnly.includes(methodInfo.name))) return;
 
         let message;
 
@@ -128,6 +132,18 @@ function Log(userOptions) {
 
     this.disable = () => {
         loggerDisabled = true;
+    };
+
+    this.outputOnly = (methods) => {
+        if (Array.isArray(methods)) {
+            options.outputMethodOnly = methods;
+        } else if (typeof methods === 'string') {
+            options.outputMethodOnly = [methods];
+        }
+    };
+
+    this.disableOutputOnlyOption = () => {
+        options.outputMethodOnly = [];
     };
 }
 

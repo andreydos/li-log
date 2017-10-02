@@ -66,6 +66,7 @@ const isBrowser = (() => {
         return false;
     }
 })();
+
 const isNode = (() => {
     try {
         return Boolean(global);
