@@ -1,8 +1,10 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.LiLog = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('format-date-time')) :
+	typeof define === 'function' && define.amd ? define(['format-date-time'], factory) :
+	(global.LiLog = factory(global['format-date-time']));
+}(this, (function (DateTimeFormat) { 'use strict';
+
+DateTimeFormat = DateTimeFormat && DateTimeFormat.hasOwnProperty('default') ? DateTimeFormat['default'] : DateTimeFormat;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -204,10 +206,30 @@ var isNode = function () {
     }
 }();
 
+function getTime() {
+    var date = new Date();
+    var hours = pad(date.getHours());
+    var minutes = pad(date.getMinutes());
+    var seconds = pad(date.getSeconds());
+
+    return hours + ':' + minutes + ':' + seconds;
+}
+
+function pad(val) {
+    var length = 2;
+    var value = String(val);
+
+    while (value.length < length) {
+        value = '0' + val;
+    }
+    return value;
+}
+
 var utils = {
     mergeOptions: mergeOptions,
     isBrowser: isBrowser,
-    isNode: isNode
+    isNode: isNode,
+    getTime: getTime
 };
 
 // default browser text styles
@@ -226,6 +248,10 @@ function Log(userOptions) {
         isNode = utils.isNode,
         mergeOptions = utils.mergeOptions;
 
+    var dateTimeFormatter = void 0;
+    if (isNode) {
+        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
+    }
     var baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
@@ -276,13 +302,19 @@ function Log(userOptions) {
     function log(logOptions, methodInfo, args) {
         if (loggerDisabled || methodInfo.level < logOptions.level || logOptions.outputMethodOnly.length && !logOptions.outputMethodOnly.includes(methodInfo.name)) return;
 
-        var message = '<' + methodInfo.name + '> ' + args;
+        var message = void 0;
+
+        if (isNode) {
+            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args;
+        } else {
+            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args;
+        }
 
         if (logOptions.coloredOutput) {
             if (isBrowser) {
                 message = '%c' + message;
             } else if (isNode) {
-                message = '|li-log| ' + message;
+                message = '' + message;
             }
         }
 

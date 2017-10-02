@@ -75,10 +75,30 @@ const isNode = (() => {
     }
 })();
 
+function getTime() {
+    const date = new Date();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+    const seconds = pad(date.getSeconds());
+
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+function pad(val) {
+    const length = 2;
+    let value = String(val);
+
+    while (value.length < length) {
+        value = '0' + val;
+    }
+    return value;
+}
+
 const utils = {
     mergeOptions,
     isBrowser,
     isNode,
+    getTime,
 };
 
 export default utils;

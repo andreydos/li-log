@@ -8,7 +8,15 @@
 Little tiny logger (browser version available 'dist/liLog.browser.min.js')
 
 ## Getting Started
-**Browser usage** see in examples directory.
+**Browser usage** please look at examples directory.
+
+Browser minified version: [link](https://raw.githubusercontent.com/andreydos/li-log/master/dist/li-log.min.js) 
+
+Use:
+```
+var logger = new LiLog();
+logger.warning('Hello warning!');
+```
 
 **Node usage**:
 
