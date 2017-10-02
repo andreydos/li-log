@@ -205,10 +205,30 @@ var isNode = function () {
     }
 }();
 
+function getTime() {
+    var date = new Date();
+    var hours = pad(date.getHours());
+    var minutes = pad(date.getMinutes());
+    var seconds = pad(date.getSeconds());
+
+    return hours + ':' + minutes + ':' + seconds;
+}
+
+function pad(val) {
+    var length = 2;
+    var value = String(val);
+
+    while (value.length < length) {
+        value = '0' + val;
+    }
+    return value;
+}
+
 var utils = {
     mergeOptions: mergeOptions,
     isBrowser: isBrowser,
-    isNode: isNode
+    isNode: isNode,
+    getTime: getTime
 };
 
 // default browser text styles
@@ -285,7 +305,7 @@ function Log(userOptions) {
         if (isNode) {
             message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args;
         } else {
-            message = '<' + methodInfo.name + '> ' + args;
+            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args;
         }
 
         if (logOptions.coloredOutput) {

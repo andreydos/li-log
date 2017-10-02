@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.8.2] - 2017-09-02
+- added timestamp for browser version
+
+## [0.8.1] - 2017-09-02
+### Update
+- package and readme update
+
+## [0.8.0] - 2017-09-02
+### Added
+- added timestamp for node version
+
 ## [0.7.0] - 2017-09-30
 ### Added
 - eslint

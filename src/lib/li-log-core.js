@@ -78,7 +78,7 @@ function Log(userOptions) {
         if (isNode) {
             message = `${dateTimeFormatter.now()} <${methodInfo.name}> ${args}`;
         } else {
-            message = `<${methodInfo.name}> ${args}`;
+            message = `${utils.getTime()} <${methodInfo.name}> ${args}`;
         }
 
 
