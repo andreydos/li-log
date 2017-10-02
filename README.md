@@ -5,10 +5,10 @@
 
 # Little Logger
 
-Little tiny logger (browser version available 'dist/liLog.browser.min.js')
+Little tiny logger
 
 ## Getting Started
-**Browser usage** please look at examples directory.
+**Browser usage** please look at examples directory (browser version available locally in project 'dist/li-log.min.js').
 
 Browser minified version: [link](https://raw.githubusercontent.com/andreydos/li-log/master/dist/li-log.min.js) 
 
