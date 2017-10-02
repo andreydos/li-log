@@ -1,3 +1,4 @@
+import DateTimeFormat from 'format-date-time';
 import utils from './utils';
 
 // default browser text styles
@@ -11,6 +12,10 @@ const browserConsoleStyles = {
 
 function Log(userOptions) {
     const { isBrowser, isNode, mergeOptions } = utils;
+    let dateTimeFormatter;
+    if (isNode) {
+        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
+    }
     const baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
@@ -68,13 +73,20 @@ function Log(userOptions) {
     function log(logOptions, methodInfo, args) {
         if (loggerDisabled || methodInfo.level < logOptions.level) return;
 
-        let message = `<${methodInfo.name}> ${args}`;
+        let message;
+
+        if (isNode) {
+            message = `${dateTimeFormatter.now()} <${methodInfo.name}> ${args}`;
+        } else {
+            message = `<${methodInfo.name}> ${args}`;
+        }
+
 
         if (logOptions.coloredOutput) {
             if (isBrowser) {
                 message = `%c${message}`;
             } else if (isNode) {
-                message = `|li-log| ${message}`;
+                message = `${message}`;
             }
         }
 

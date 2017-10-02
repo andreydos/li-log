@@ -1,8 +1,10 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.LiLog = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('format-date-time')) :
+	typeof define === 'function' && define.amd ? define(['format-date-time'], factory) :
+	(global.LiLog = factory(global['format-date-time']));
+}(this, (function (DateTimeFormat) { 'use strict';
+
+DateTimeFormat = DateTimeFormat && DateTimeFormat.hasOwnProperty('default') ? DateTimeFormat['default'] : DateTimeFormat;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -225,6 +227,10 @@ function Log(userOptions) {
         isNode = utils.isNode,
         mergeOptions = utils.mergeOptions;
 
+    var dateTimeFormatter = void 0;
+    if (isNode) {
+        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
+    }
     var baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
@@ -274,13 +280,19 @@ function Log(userOptions) {
     function log(logOptions, methodInfo, args) {
         if (loggerDisabled || methodInfo.level < logOptions.level) return;
 
-        var message = '<' + methodInfo.name + '> ' + args;
+        var message = void 0;
+
+        if (isNode) {
+            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args;
+        } else {
+            message = '<' + methodInfo.name + '> ' + args;
+        }
 
         if (logOptions.coloredOutput) {
             if (isBrowser) {
                 message = '%c' + message;
             } else if (isNode) {
-                message = '|li-log| ' + message;
+                message = '' + message;
             }
         }
 

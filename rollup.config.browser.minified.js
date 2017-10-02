@@ -1,5 +1,9 @@
 import babel from 'rollup-plugin-babel';
 import minify from 'rollup-plugin-babel-minify';
+import builtinModules from "builtin-modules"
+
+const pkg = require('./package.json');
+const external = Object.keys(pkg.dependencies).concat(builtinModules);
 
 export default {
     output: {
@@ -16,5 +20,9 @@ export default {
         minify({
             comments: false
         })
-    ]
+    ],
+    external,
+    globals: {
+        'format-date-time': 'format-date-time'
+    }
 };
