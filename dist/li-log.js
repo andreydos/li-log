@@ -248,10 +248,6 @@ function Log(userOptions) {
         isNode = utils.isNode,
         mergeOptions = utils.mergeOptions;
 
-    var dateTimeFormatter = void 0;
-    if (isNode) {
-        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
-    }
     var baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
@@ -289,9 +285,13 @@ function Log(userOptions) {
             }
         }]
     };
-
+    var dateTimeFormatter = void 0;
     var options = baseOptions;
     var loggerDisabled = false;
+
+    if (isNode) {
+        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
+    }
 
     if ((typeof userOptions === 'undefined' ? 'undefined' : _typeof(userOptions)) === 'object') {
         options = mergeOptions(baseOptions, userOptions);
@@ -354,6 +354,7 @@ function Log(userOptions) {
             var methods = options.logMethods.filter(function (method) {
                 return method.name === level;
             });
+
             if (Array.isArray(methods) && methods.length) {
                 options.level = methods[0].level;
             }

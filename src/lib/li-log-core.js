@@ -12,10 +12,6 @@ const browserConsoleStyles = {
 
 function Log(userOptions) {
     const { isBrowser, isNode, mergeOptions } = utils;
-    let dateTimeFormatter;
-    if (isNode) {
-        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
-    }
     const baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
@@ -61,9 +57,13 @@ function Log(userOptions) {
             },
         ],
     };
-
+    let dateTimeFormatter;
     let options = baseOptions;
     let loggerDisabled = false;
+
+    if (isNode) {
+        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
+    }
 
     if (typeof userOptions === 'object') {
         options = mergeOptions(baseOptions, userOptions);
@@ -84,7 +84,6 @@ function Log(userOptions) {
         } else {
             message = `${utils.getTime()} <${methodInfo.name}> ${args}`;
         }
-
 
         if (logOptions.coloredOutput) {
             if (isBrowser) {
@@ -113,7 +112,8 @@ function Log(userOptions) {
         if (methodInfo.level >= options.level) {
             this[methodInfo.name] = (...args) => log(options, methodInfo, args);
         } else {
-            this[methodInfo.name] = () => {};
+            this[methodInfo.name] = () => {
+            };
         }
     });
 
@@ -122,6 +122,7 @@ function Log(userOptions) {
             options.level = level;
         } else if (typeof level === 'string') {
             const methods = options.logMethods.filter(method => method.name === level);
+
             if (Array.isArray(methods) && methods.length) {
                 options.level = methods[0].level;
             }
