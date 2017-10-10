@@ -12,6 +12,195 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
+
+
+
+
+var asyncGenerator = function () {
+  function AwaitValue(value) {
+    this.value = value;
+  }
+
+  function AsyncGenerator(gen) {
+    var front, back;
+
+    function send(key, arg) {
+      return new Promise(function (resolve, reject) {
+        var request = {
+          key: key,
+          arg: arg,
+          resolve: resolve,
+          reject: reject,
+          next: null
+        };
+
+        if (back) {
+          back = back.next = request;
+        } else {
+          front = back = request;
+          resume(key, arg);
+        }
+      });
+    }
+
+    function resume(key, arg) {
+      try {
+        var result = gen[key](arg);
+        var value = result.value;
+
+        if (value instanceof AwaitValue) {
+          Promise.resolve(value.value).then(function (arg) {
+            resume("next", arg);
+          }, function (arg) {
+            resume("throw", arg);
+          });
+        } else {
+          settle(result.done ? "return" : "normal", result.value);
+        }
+      } catch (err) {
+        settle("throw", err);
+      }
+    }
+
+    function settle(type, value) {
+      switch (type) {
+        case "return":
+          front.resolve({
+            value: value,
+            done: true
+          });
+          break;
+
+        case "throw":
+          front.reject(value);
+          break;
+
+        default:
+          front.resolve({
+            value: value,
+            done: false
+          });
+          break;
+      }
+
+      front = front.next;
+
+      if (front) {
+        resume(front.key, front.arg);
+      } else {
+        back = null;
+      }
+    }
+
+    this._invoke = send;
+
+    if (typeof gen.return !== "function") {
+      this.return = undefined;
+    }
+  }
+
+  if (typeof Symbol === "function" && Symbol.asyncIterator) {
+    AsyncGenerator.prototype[Symbol.asyncIterator] = function () {
+      return this;
+    };
+  }
+
+  AsyncGenerator.prototype.next = function (arg) {
+    return this._invoke("next", arg);
+  };
+
+  AsyncGenerator.prototype.throw = function (arg) {
+    return this._invoke("throw", arg);
+  };
+
+  AsyncGenerator.prototype.return = function (arg) {
+    return this._invoke("return", arg);
+  };
+
+  return {
+    wrap: function (fn) {
+      return function () {
+        return new AsyncGenerator(fn.apply(this, arguments));
+      };
+    },
+    await: function (value) {
+      return new AwaitValue(value);
+    }
+  };
+}();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
 function copyDeep(baseObj) {
     function cloneObject(obj) {
         var clone = {};
@@ -89,15 +278,6 @@ var isNode = function () {
     }
 }();
 
-function getTime() {
-    var date = new Date();
-    var hours = pad(date.getHours());
-    var minutes = pad(date.getMinutes());
-    var seconds = pad(date.getSeconds());
-
-    return hours + ':' + minutes + ':' + seconds;
-}
-
 function pad(val) {
     var length = 2;
     var value = String(val);
@@ -106,6 +286,15 @@ function pad(val) {
         value = '0' + val;
     }
     return value;
+}
+
+function getTime() {
+    var date = new Date();
+    var hours = pad(date.getHours());
+    var minutes = pad(date.getMinutes());
+    var seconds = pad(date.getSeconds());
+
+    return hours + ':' + minutes + ':' + seconds;
 }
 
 var utils = {
@@ -124,6 +313,11 @@ var browserConsoleStyles = {
     critical: 'font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);'
 };
 
+// Stack trace format :
+// https://github.com/v8/v8/wiki/Stack%20Trace%20API
+var stackReg = /at\s+(.*)\s+\((.*):(\d*):(\d*)\)/i;
+var stackReg2 = /at\s+()(.*):(\d*):(\d*)/i;
+
 function Log(userOptions) {
     var _this = this;
 
@@ -135,6 +329,7 @@ function Log(userOptions) {
         level: 1, // info as default
         coloredOutput: true,
         outputMethodOnly: [],
+        showStackData: true,
         logMethods: [{
             name: 'debug',
             level: 0,
@@ -186,11 +381,44 @@ function Log(userOptions) {
         if (loggerDisabled || methodInfo.level < logOptions.level || logOptions.outputMethodOnly.length && !logOptions.outputMethodOnly.includes(methodInfo.name)) return;
 
         var message = void 0;
+        var stackInfo = '';
+        var stack = {
+            method: '',
+            line: '',
+            file: ''
+        };
+
+        if (logOptions.showStackData) {
+            var stackMessage = new Error().stack.split('\n').slice(3);
+            var stackDataString = stackMessage[0];
+            var stackData = stackReg.exec(stackDataString) || stackReg2.exec(stackDataString);
+
+            if (stackData && stackData.length === 5) {
+                var _stackData = slicedToArray(stackData, 4),
+                    msg = _stackData[0],
+                    method = _stackData[1],
+                    path = _stackData[2],
+                    line = _stackData[3];
+
+                stack.message = msg;
+                stack.method = method;
+                stack.path = path;
+                stack.line = line;
+                stack.file = stack.path.split(/[\\/]/).pop();
+                stack.stack = stackMessage.join('\n');
+            }
+
+            if (stack.method) {
+                stackInfo = ' | Message from: ' + stack.file + ' at ' + stack.method + '() line:' + stack.line;
+            } else {
+                stackInfo = ' | Message from: ' + stack.file + ' at line:' + stack.line;
+            }
+        }
 
         if (isNode) {
-            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args;
+            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args + stackInfo;
         } else {
-            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args;
+            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args + stackInfo;
         }
 
         if (logOptions.coloredOutput) {

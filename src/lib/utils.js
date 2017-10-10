@@ -75,6 +75,16 @@ const isNode = (() => {
     }
 })();
 
+function pad(val) {
+    const length = 2;
+    let value = String(val);
+
+    while (value.length < length) {
+        value = `0${val}`;
+    }
+    return value;
+}
+
 function getTime() {
     const date = new Date();
     const hours = pad(date.getHours());
@@ -82,16 +92,6 @@ function getTime() {
     const seconds = pad(date.getSeconds());
 
     return `${hours}:${minutes}:${seconds}`;
-}
-
-function pad(val) {
-    const length = 2;
-    let value = String(val);
-
-    while (value.length < length) {
-        value = '0' + val;
-    }
-    return value;
 }
 
 const utils = {

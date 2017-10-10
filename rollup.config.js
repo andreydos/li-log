@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel';
-// import eslint from 'rollup-plugin-eslint';
-// import formatterFriendly from 'eslint-friendly-formatter';
+import eslint from 'rollup-plugin-eslint';
+import formatterFriendly from 'eslint-friendly-formatter';
 import builtinModules from "builtin-modules"
 
 const pkg = require('./package.json');
@@ -14,12 +14,12 @@ export default {
     name: 'LiLog',
     input: 'src/index.js',
     plugins: [
-        // eslint({
-        //     exclude: ['node_modules/**'],
-        //     include: 'src/**/*.js',
-        //     throwOnError: true,
-        //     formatter: formatterFriendly
-        // }),
+        eslint({
+            exclude: ['node_modules/**'],
+            include: 'src/**/*.js',
+            throwOnError: true,
+            formatter: formatterFriendly
+        }),
         babel({
             exclude: ['node_modules/**']
         })

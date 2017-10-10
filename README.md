@@ -60,6 +60,12 @@ var logger = new liLog('no-color');
 
 ```
 
+* Disable stack info:
+
+```
+var logger = new liLog({ showStackData : false });
+```
+
 * Output only specified log methods:
 
 ```

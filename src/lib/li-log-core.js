@@ -10,12 +10,18 @@ const browserConsoleStyles = {
     critical: 'font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);',
 };
 
+// Stack trace format :
+// https://github.com/v8/v8/wiki/Stack%20Trace%20API
+const stackReg = /at\s+(.*)\s+\((.*):(\d*):(\d*)\)/i;
+const stackReg2 = /at\s+()(.*):(\d*):(\d*)/i;
+
 function Log(userOptions) {
     const { isBrowser, isNode, mergeOptions } = utils;
     const baseOptions = {
         level: 1, // info as default
         coloredOutput: true,
         outputMethodOnly: [],
+        showStackData: true,
         logMethods: [
             {
                 name: 'debug',
@@ -78,11 +84,39 @@ function Log(userOptions) {
                 && !logOptions.outputMethodOnly.includes(methodInfo.name))) return;
 
         let message;
+        let stackInfo = '';
+        const stack = {
+            method: '',
+            line: '',
+            file: '',
+        };
+
+        if (logOptions.showStackData) {
+            const stackMessage = new Error().stack.split('\n').slice(3);
+            const stackDataString = stackMessage[0];
+            const stackData = stackReg.exec(stackDataString) || stackReg2.exec(stackDataString);
+
+            if (stackData && stackData.length === 5) {
+                const [msg, method, path, line] = stackData;
+                stack.message = msg;
+                stack.method = method;
+                stack.path = path;
+                stack.line = line;
+                stack.file = stack.path.split(/[\\/]/).pop();
+                stack.stack = stackMessage.join('\n');
+            }
+
+            if (stack.method) {
+                stackInfo = ` | Message from: ${stack.file} at ${stack.method}() line:${stack.line}`;
+            } else {
+                stackInfo = ` | Message from: ${stack.file} at line:${stack.line}`;
+            }
+        }
 
         if (isNode) {
-            message = `${dateTimeFormatter.now()} <${methodInfo.name}> ${args}`;
+            message = `${dateTimeFormatter.now()} <${methodInfo.name}> ${args}${stackInfo}`;
         } else {
-            message = `${utils.getTime()} <${methodInfo.name}> ${args}`;
+            message = `${utils.getTime()} <${methodInfo.name}> ${args}${stackInfo}`;
         }
 
         if (logOptions.coloredOutput) {

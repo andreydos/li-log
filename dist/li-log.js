@@ -129,6 +129,78 @@ var asyncGenerator = function () {
   };
 }();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
 function copyDeep(baseObj) {
     function cloneObject(obj) {
         var clone = {};
@@ -206,15 +278,6 @@ var isNode = function () {
     }
 }();
 
-function getTime() {
-    var date = new Date();
-    var hours = pad(date.getHours());
-    var minutes = pad(date.getMinutes());
-    var seconds = pad(date.getSeconds());
-
-    return hours + ':' + minutes + ':' + seconds;
-}
-
 function pad(val) {
     var length = 2;
     var value = String(val);
@@ -223,6 +286,15 @@ function pad(val) {
         value = '0' + val;
     }
     return value;
+}
+
+function getTime() {
+    var date = new Date();
+    var hours = pad(date.getHours());
+    var minutes = pad(date.getMinutes());
+    var seconds = pad(date.getSeconds());
+
+    return hours + ':' + minutes + ':' + seconds;
 }
 
 var utils = {
@@ -241,6 +313,11 @@ var browserConsoleStyles = {
     critical: 'font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);'
 };
 
+// Stack trace format :
+// https://github.com/v8/v8/wiki/Stack%20Trace%20API
+var stackReg = /at\s+(.*)\s+\((.*):(\d*):(\d*)\)/i;
+var stackReg2 = /at\s+()(.*):(\d*):(\d*)/i;
+
 function Log(userOptions) {
     var _this = this;
 
@@ -252,6 +329,7 @@ function Log(userOptions) {
         level: 1, // info as default
         coloredOutput: true,
         outputMethodOnly: [],
+        showStackData: true,
         logMethods: [{
             name: 'debug',
             level: 0,
@@ -303,11 +381,44 @@ function Log(userOptions) {
         if (loggerDisabled || methodInfo.level < logOptions.level || logOptions.outputMethodOnly.length && !logOptions.outputMethodOnly.includes(methodInfo.name)) return;
 
         var message = void 0;
+        var stackInfo = '';
+        var stack = {
+            method: '',
+            line: '',
+            file: ''
+        };
+
+        if (logOptions.showStackData) {
+            var stackMessage = new Error().stack.split('\n').slice(3);
+            var stackDataString = stackMessage[0];
+            var stackData = stackReg.exec(stackDataString) || stackReg2.exec(stackDataString);
+
+            if (stackData && stackData.length === 5) {
+                var _stackData = slicedToArray(stackData, 4),
+                    msg = _stackData[0],
+                    method = _stackData[1],
+                    path = _stackData[2],
+                    line = _stackData[3];
+
+                stack.message = msg;
+                stack.method = method;
+                stack.path = path;
+                stack.line = line;
+                stack.file = stack.path.split(/[\\/]/).pop();
+                stack.stack = stackMessage.join('\n');
+            }
+
+            if (stack.method) {
+                stackInfo = ' | Message from: ' + stack.file + ' at ' + stack.method + '() line:' + stack.line;
+            } else {
+                stackInfo = ' | Message from: ' + stack.file + ' at line:' + stack.line;
+            }
+        }
 
         if (isNode) {
-            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args;
+            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args + stackInfo;
         } else {
-            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args;
+            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args + stackInfo;
         }
 
         if (logOptions.coloredOutput) {
