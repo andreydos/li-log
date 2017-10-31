@@ -5,7 +5,7 @@
 
 # Little Logger
 
-Little tiny logger
+Little tiny logger. Can be used in browser and node environment. Add useful data to message and some pretty styles in browser.
 
 ## Getting Started
 **Browser usage** please look at examples directory (browser version available locally in project 'dist/li-log.min.js').
