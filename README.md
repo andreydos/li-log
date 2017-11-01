@@ -20,6 +20,10 @@ logger.warning('Hello warning!');
 
 **Node usage**:
 
+```
+npm install li-log
+```
+
 * Define logger with default setting:
 
 ```

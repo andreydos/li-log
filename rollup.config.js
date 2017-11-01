@@ -2,7 +2,6 @@ import babel from 'rollup-plugin-babel';
 import eslint from 'rollup-plugin-eslint';
 import formatterFriendly from 'eslint-friendly-formatter';
 import builtinModules from "builtin-modules"
-import minify from 'rollup-plugin-babel-minify';
 
 const pkg = require('./package.json');
 const external = Object.keys(pkg.dependencies).concat(builtinModules);
@@ -23,9 +22,6 @@ export default {
         }),
         babel({
             exclude: ['node_modules/**']
-        }),
-        minify({
-            comments: false
         })
     ],
     external,

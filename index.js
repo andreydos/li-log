@@ -1,1 +1,345 @@
-(function(a,b){'object'==typeof exports&&'undefined'!=typeof module?module.exports=b(require('format-date-time')):'function'==typeof define&&define.amd?define(['format-date-time'],b):a.LiLog=b(a['format-date-time'])})(this,function(a){'use strict';function b(a){function b(a){for(var c={},e=Object.keys(a),f=e.length;f;){var g=e[f];c[g]='object'===d(a[g])&&null!==a[g]?b(a[g]):a[g],f-=1}return c}for(var c={},e=Object.keys(a),f=e.length;f;){var g=e[f],h=a[g];c[g]=Array.isArray(h)?h.slice(0):'object'===('undefined'==typeof h?'undefined':d(h))?b(h):h,f-=1}return c}function c(a){for(var b=a+'';b.length<2;)b='0'+a;return b}a=a&&a.hasOwnProperty('default')?a['default']:a;var d='function'==typeof Symbol&&'symbol'==typeof Symbol.iterator?function(a){return typeof a}:function(a){return a&&'function'==typeof Symbol&&a.constructor===Symbol&&a!==Symbol.prototype?'symbol':typeof a},e=function(){function a(a){this.value=a}function b(b){function c(e,f){try{var g=b[e](f),h=g.value;h instanceof a?Promise.resolve(h.value).then(function(a){c('next',a)},function(a){c('throw',a)}):d(g.done?'return':'normal',g.value)}catch(a){d('throw',a)}}function d(a,b){'return'===a?e.resolve({value:b,done:!0}):'throw'===a?e.reject(b):e.resolve({value:b,done:!1});e=e.next,e?c(e.key,e.arg):f=null}var e,f;this._invoke=function(a,b){return new Promise(function(d,g){var h={key:a,arg:b,resolve:d,reject:g,next:null};f?f=f.next=h:(e=f=h,c(a,b))})},'function'!=typeof b.return&&(this.return=void 0)}return'function'==typeof Symbol&&Symbol.asyncIterator&&(b.prototype[Symbol.asyncIterator]=function(){return this}),b.prototype.next=function(a){return this._invoke('next',a)},b.prototype.throw=function(a){return this._invoke('throw',a)},b.prototype.return=function(a){return this._invoke('return',a)},{wrap:function(a){return function(){return new b(a.apply(this,arguments))}},await:function(b){return new a(b)}}}(),f=function(){function a(a,b){var c,d=[],e=!0,f=!1;try{for(var g,h=a[Symbol.iterator]();!(e=(g=h.next()).done)&&(d.push(g.value),!(b&&d.length===b));e=!0);}catch(a){f=!0,c=a}finally{try{!e&&h['return']&&h['return']()}finally{if(f)throw c}}return d}return function(b,c){if(Array.isArray(b))return b;if(Symbol.iterator in Object(b))return a(b,c);throw new TypeError('Invalid attempt to destructure non-iterable instance')}}(),g=function(){try{return!!window}catch(a){return!1}}(),h=function(){try{return!!global}catch(a){return!1}}(),i={mergeOptions:function(a,c){for(var d=b(a),e=Object.keys(c),f=e.length;f;){var g=e[f];d[g]=c[g],f-=1}return d},isBrowser:g,isNode:h,getTime:function(){var a=new Date,b=c(a.getHours()),d=c(a.getMinutes()),e=c(a.getSeconds());return b+':'+d+':'+e}},j={debug:'font-browserStyle: italic; color: #1B2B34;',info:'color: #6699CC;',warning:'font-weight: bold; color: #AB7967;',error:'font-weight: bold; color: #E24825;',critical:'font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);'},k=/at\s+(.*)\s+\((.*):(\d*):(\d*)\)/i,l=/at\s+()(.*):(\d*):(\d*)/i;return function(b){function c(a,b,c){if(!(q||b.level<a.level||a.outputMethodOnly.length&&!a.outputMethodOnly.includes(b.name))){var d,g='',j={method:'',line:'',file:''};if(a.showStackData){var n=new Error().stack.split('\n').slice(3),o=n[0],p=k.exec(o)||l.exec(o);if(p&&5===p.length){var r=f(p,4),s=r[0],t=r[1],u=r[2],v=r[3];j.message=s,j.method=t,j.path=u,j.line=v,j.file=j.path.split(/[\\/]/).pop(),j.stack=n.join('\n')}g=j.method?' | Message from: '+j.file+' at '+j.method+'() line:'+j.line:' | Message from: '+j.file+' at line:'+j.line}d=m?e.now()+' <'+b.name+'> '+c+g:i.getTime()+' <'+b.name+'> '+c+g,a.coloredOutput&&(h?d='%c'+d:m&&(d=''+d));var w={message:d,browserStyle:b.browserStyle,nodeStyle:b.nodeStyle};a.transport.forEach(function(a){if('function'==typeof a)a(w);else throw new Error('Transport item not a function')})}}var e,g=this,h=i.isBrowser,m=i.isNode,n=i.mergeOptions,o={level:1,coloredOutput:!0,outputMethodOnly:[],showStackData:!0,logMethods:[{name:'debug',level:0,browserStyle:j.debug},{name:'info',level:1,browserStyle:j.info},{name:'warning',level:2,browserStyle:j.warning},{name:'error',level:3,browserStyle:j.error},{name:'critical',level:4,browserStyle:j.critical}],transport:[function(a){h?o.coloredOutput?console.log(a.message,a.browserStyle):console.log(a.message):console.log(a.message)}]},p=o,q=!1;m&&(e=new a('HH:mm:ss')),'object'===('undefined'==typeof b?'undefined':d(b))?p=n(o,b):'string'==typeof b&&'no-color'===b&&(o.coloredOutput=!1),p.logMethods.forEach(function(a){g[a.name]=a.level>=p.level?function(){for(var b=arguments.length,d=Array(b),e=0;e<b;e++)d[e]=arguments[e];return c(p,a,d)}:function(){}}),this.setLevel=function(a){if(Number.isInteger(a))p.level=a;else if('string'==typeof a){var b=p.logMethods.filter(function(b){return b.name===a});Array.isArray(b)&&b.length&&(p.level=b[0].level)}else console.log('setLevel() level '+a+' was not found in LiLog instance')},this.disable=function(){q=!0},this.outputOnly=function(a){Array.isArray(a)?p.outputMethodOnly=a:'string'==typeof a&&(p.outputMethodOnly=[a])},this.disableOutputOnlyOption=function(){p.outputMethodOnly=[]}}});
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('format-date-time')) :
+	typeof define === 'function' && define.amd ? define(['format-date-time'], factory) :
+	(global.LiLog = factory(global['format-date-time']));
+}(this, (function (DateTimeFormat) { 'use strict';
+
+DateTimeFormat = DateTimeFormat && DateTimeFormat.hasOwnProperty('default') ? DateTimeFormat['default'] : DateTimeFormat;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+var slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+function copyDeep(baseObj) {
+    function cloneObject(obj) {
+        var clone = {};
+        var objKeys = Object.keys(obj);
+        var i = objKeys.length;
+
+        while (i) {
+            var key = objKeys[i];
+
+            if (_typeof(obj[key]) === 'object' && obj[key] !== null) {
+                clone[key] = cloneObject(obj[key]);
+            } else {
+                clone[key] = obj[key];
+            }
+
+            i -= 1;
+        }
+
+        return clone;
+    }
+
+    var newObj = {};
+    var keys = Object.keys(baseObj);
+
+    var j = keys.length;
+
+    while (j) {
+        var key = keys[j];
+        var current = baseObj[key];
+
+        if (Array.isArray(current)) {
+            newObj[key] = current.slice(0);
+        } else if ((typeof current === 'undefined' ? 'undefined' : _typeof(current)) === 'object') {
+            newObj[key] = cloneObject(current);
+        } else {
+            newObj[key] = current;
+        }
+
+        j -= 1;
+    }
+
+    return newObj;
+}
+
+function mergeOptions(baseOptions, userOptions) {
+    var resultOptions = copyDeep(baseOptions);
+    var keys = Object.keys(userOptions);
+
+    var i = keys.length;
+
+    while (i) {
+        var key = keys[i];
+
+        resultOptions[key] = userOptions[key];
+
+        i -= 1;
+    }
+
+    return resultOptions;
+}
+
+var isBrowser = function () {
+    try {
+        return Boolean(window);
+    } catch (e) {
+        return false;
+    }
+}();
+
+var isNode = function () {
+    try {
+        return Boolean(global);
+    } catch (e) {
+        return false;
+    }
+}();
+
+function pad(val) {
+    var length = 2;
+    var value = String(val);
+
+    while (value.length < length) {
+        value = '0' + val;
+    }
+    return value;
+}
+
+function getTime() {
+    var date = new Date();
+    var hours = pad(date.getHours());
+    var minutes = pad(date.getMinutes());
+    var seconds = pad(date.getSeconds());
+
+    return hours + ':' + minutes + ':' + seconds;
+}
+
+var utils = {
+    mergeOptions: mergeOptions,
+    isBrowser: isBrowser,
+    isNode: isNode,
+    getTime: getTime
+};
+
+// default browser text styles
+var browserConsoleStyles = {
+    debug: 'font-browserStyle: italic; color: #1B2B34;',
+    info: 'color: #6699CC;',
+    warning: 'font-weight: bold; color: #AB7967;',
+    error: 'font-weight: bold; color: #E24825;',
+    critical: 'font-weight: bold; color: #FAFAFA; padding: 3px; background: linear-gradient(#D33106, #571402);'
+};
+
+// Stack trace format :
+// https://github.com/v8/v8/wiki/Stack%20Trace%20API
+var stackReg = /at\s+(.*)\s+\((.*):(\d*):(\d*)\)/i;
+var stackReg2 = /at\s+()(.*):(\d*):(\d*)/i;
+
+function Log(userOptions) {
+    var _this = this;
+
+    var isBrowser = utils.isBrowser,
+        isNode = utils.isNode,
+        mergeOptions = utils.mergeOptions;
+
+    var baseOptions = {
+        level: 1, // info as default
+        coloredOutput: true,
+        outputMethodOnly: [],
+        showStackData: true,
+        logMethods: [{
+            name: 'debug',
+            level: 0,
+            browserStyle: browserConsoleStyles.debug
+        }, {
+            name: 'info',
+            level: 1,
+            browserStyle: browserConsoleStyles.info
+        }, {
+            name: 'warning',
+            level: 2,
+            browserStyle: browserConsoleStyles.warning
+        }, {
+            name: 'error',
+            level: 3,
+            browserStyle: browserConsoleStyles.error
+        }, {
+            name: 'critical',
+            level: 4,
+            browserStyle: browserConsoleStyles.critical
+        }],
+        transport: [function finalLog(data) {
+            if (isBrowser) {
+                if (baseOptions.coloredOutput) {
+                    console.log(data.message, data.browserStyle);
+                } else {
+                    console.log(data.message);
+                }
+            } else {
+                console.log(data.message);
+            }
+        }]
+    };
+    var dateTimeFormatter = void 0;
+    var options = baseOptions;
+    var loggerDisabled = false;
+
+    if (isNode) {
+        dateTimeFormatter = new DateTimeFormat('HH:mm:ss');
+    }
+
+    if ((typeof userOptions === 'undefined' ? 'undefined' : _typeof(userOptions)) === 'object') {
+        options = mergeOptions(baseOptions, userOptions);
+    } else if (typeof userOptions === 'string' && userOptions === 'no-color') {
+        baseOptions.coloredOutput = false;
+    }
+
+    function log(logOptions, methodInfo, args) {
+        if (loggerDisabled || methodInfo.level < logOptions.level || logOptions.outputMethodOnly.length && !logOptions.outputMethodOnly.includes(methodInfo.name)) return;
+
+        var message = void 0;
+        var stackInfo = '';
+        var stack = {
+            method: '',
+            line: '',
+            file: ''
+        };
+
+        if (logOptions.showStackData) {
+            var stackMessage = new Error().stack.split('\n').slice(3);
+            var stackDataString = stackMessage[0];
+            var stackData = stackReg.exec(stackDataString) || stackReg2.exec(stackDataString);
+
+            if (stackData && stackData.length === 5) {
+                var _stackData = slicedToArray(stackData, 4),
+                    msg = _stackData[0],
+                    method = _stackData[1],
+                    path = _stackData[2],
+                    line = _stackData[3];
+
+                stack.message = msg;
+                stack.method = method;
+                stack.path = path;
+                stack.line = line;
+                stack.file = stack.path.split(/[\\/]/).pop();
+                stack.stack = stackMessage.join('\n');
+            }
+
+            if (stack.method) {
+                stackInfo = ' | Message from: ' + stack.file + ' at ' + stack.method + '() line:' + stack.line;
+            } else {
+                stackInfo = ' | Message from: ' + stack.file + ' at line:' + stack.line;
+            }
+        }
+
+        if (isNode) {
+            message = dateTimeFormatter.now() + ' <' + methodInfo.name + '> ' + args + stackInfo;
+        } else {
+            message = utils.getTime() + ' <' + methodInfo.name + '> ' + args + stackInfo;
+        }
+
+        if (logOptions.coloredOutput) {
+            if (isBrowser) {
+                message = '%c' + message;
+            } else if (isNode) {
+                message = '' + message;
+            }
+        }
+
+        var data = {
+            message: message,
+            browserStyle: methodInfo.browserStyle,
+            nodeStyle: methodInfo.nodeStyle
+        };
+
+        logOptions.transport.forEach(function (fn) {
+            if (typeof fn === 'function') {
+                fn(data);
+            } else {
+                throw new Error('Transport item not a function');
+            }
+        });
+    }
+
+    options.logMethods.forEach(function (methodInfo) {
+        if (methodInfo.level >= options.level) {
+            _this[methodInfo.name] = function () {
+                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                    args[_key] = arguments[_key];
+                }
+
+                return log(options, methodInfo, args);
+            };
+        } else {
+            _this[methodInfo.name] = function () {};
+        }
+    });
+
+    this.setLevel = function (level) {
+        if (Number.isInteger(level)) {
+            options.level = level;
+        } else if (typeof level === 'string') {
+            var methods = options.logMethods.filter(function (method) {
+                return method.name === level;
+            });
+
+            if (Array.isArray(methods) && methods.length) {
+                options.level = methods[0].level;
+            }
+        } else {
+            console.log('setLevel() level ' + level + ' was not found in LiLog instance');
+        }
+    };
+
+    this.disable = function () {
+        loggerDisabled = true;
+    };
+
+    this.outputOnly = function (methods) {
+        if (Array.isArray(methods)) {
+            options.outputMethodOnly = methods;
+        } else if (typeof methods === 'string') {
+            options.outputMethodOnly = [methods];
+        }
+    };
+
+    this.disableOutputOnlyOption = function () {
+        options.outputMethodOnly = [];
+    };
+}
+
+return Log;
+
+})));

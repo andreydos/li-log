@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.9.3] - 2017-11-01
+### Update
+- Rollup config update
+
 ## [0.9.2] - 2017-10-31
 ### Update
 - README update
