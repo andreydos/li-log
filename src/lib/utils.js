@@ -25,7 +25,7 @@ function copyDeep(baseObj) {
     let j = keys.length;
 
     while (j) {
-        const key = keys[j];
+        const key = keys[j - 1];
         const current = baseObj[key];
 
         if (Array.isArray(current)) {
@@ -49,7 +49,7 @@ function mergeOptions(baseOptions, userOptions) {
     let i = keys.length;
 
     while (i) {
-        const key = keys[i];
+        const key = keys[i - 1];
 
         resultOptions[key] = userOptions[key];
 

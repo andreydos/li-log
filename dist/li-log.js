@@ -228,7 +228,7 @@ function copyDeep(baseObj) {
     var j = keys.length;
 
     while (j) {
-        var key = keys[j];
+        var key = keys[j - 1];
         var current = baseObj[key];
 
         if (Array.isArray(current)) {
@@ -252,7 +252,7 @@ function mergeOptions(baseOptions, userOptions) {
     var i = keys.length;
 
     while (i) {
-        var key = keys[i];
+        var key = keys[i - 1];
 
         resultOptions[key] = userOptions[key];
 
@@ -445,7 +445,7 @@ function Log(userOptions) {
     }
 
     options.logMethods.forEach(function (methodInfo) {
-        if (methodInfo.level >= options.level) {
+        if (methodInfo.level >= (options.level || 0)) {
             _this[methodInfo.name] = function () {
                 for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
                     args[_key] = arguments[_key];

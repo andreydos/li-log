@@ -27,9 +27,9 @@ npm install li-log
 * Define logger with default setting:
 
 ```
-var liLog = require("li-log")
+var LiLog = require("li-log")
 
-var logger = new liLog();
+var logger = new LiLog();
 
 logger.info('Info');
 ```
@@ -38,9 +38,9 @@ logger.info('Info');
 
 
 ```
-var liLog = require("li-log")
+var LiLog = require("li-log")
 
-var logger = new liLog({ level: 3});
+var logger = new LiLog({ level: 3});
 
 logger.info('Info'); // will be skipped
 logger.error('Error) // you'll see in console

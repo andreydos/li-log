@@ -143,7 +143,7 @@ function Log(userOptions) {
     }
 
     options.logMethods.forEach((methodInfo) => {
-        if (methodInfo.level >= options.level) {
+        if (methodInfo.level >= (options.level || 0)) {
             this[methodInfo.name] = (...args) => log(options, methodInfo, args);
         } else {
             this[methodInfo.name] = () => {
