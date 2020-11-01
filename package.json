@@ -1,6 +1,6 @@
 {
   "name": "li-log",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "Little tiny logger",
   "main": "index.js",
   "scripts": {
